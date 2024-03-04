@@ -12,6 +12,9 @@
         <input type="text" placeholder="enter city name" spellcheck="false">
         <button><img src="images/search.png"></button>
     </div>
+    <div class="error">
+        <p>Invalid City name</p>
+    </div>
     <div class="weather">
         <img src="images/clouds.png" class="weather-icon">
         <h1 class="temp">54°F</h1>
@@ -36,14 +39,43 @@
 
 <script>
     const apiKey = "a299a166f3c8fc853a216d20b99eabc0";
-    const apiURL= "https://api.openweathermap.org/data/2.5/weather?&q=Los&Gatos";
+    const apiURL= "https://api.openweathermap.org/data/2.5/weather?units=imperial&q=";
+    
+    const inputBox = document.querySelector(".search input");
+    const searchButton = document.querySelector(".search button");
+    const currWeatherIcon = document.querySelector(".weather-icon");
 
-    async function checkWeather() {
-        const response = await fetch(apiURL + `&appid=&{apiKey}`);
+    async function checkWeather(city) {
+        const response = await fetch(apiURL + city + `&appid=${apiKey}`);
         var data = await response.json();
 
         console.log(data);
+
+        document.querySelector(".city").innerHTML = data.name;
+        document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°F";
+        document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML = data.wind.speed + " mph";
+
+        if(data.weather[0].main == "Clouds") {
+            currWeatherIcon.src = "images/clouds.png";
+        } else if (data.weather[0].main == "Clear") {
+            currWeatherIcon.src = "images/clear.png";
+        } else if (data.weather[0].main == "Drizzle") {
+            currWeatherIcon.src = "images/drizzle.png";
+        } else if (data.weather[0].main == "Mist") {
+            currWeatherIcon.src = "images/mist.png";
+        } else if (data.weather[0].main == "Rain") {
+            currWeatherIcon.src = "images/rain.png";
+        } else if (data.weather[0].main == "Snow") {
+            currWeatherIcon.src = "images/snow.png";
+        }
+
+        document.querySelector(".weather").style.display = "block";
     }
+
+    searchButton.addEventListener("click", ()=>{
+        checkWeather(inputBox.value);
+    })
 
 </script>
 
