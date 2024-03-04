@@ -13,7 +13,7 @@
         <button><img src="images/search.png"></button>
     </div>
     <div class="error">
-        <p>Invalid City name</p>
+        <p>Invalid City Name</p>
     </div>
     <div class="weather">
         <img src="images/clouds.png" class="weather-icon">
@@ -47,38 +47,52 @@
 
     async function checkWeather(city) {
         const response = await fetch(apiURL + city + `&appid=${apiKey}`);
-        var data = await response.json();
+        
+        if(response.status == 404) {
+            document.querySelector(".error").style.display = "block";
+            document.querySelector(".weather").style.display = "none";
+        } else {
+            var data = await response.json();
 
-        console.log(data);
+            console.log(data);
 
-        document.querySelector(".city").innerHTML = data.name;
-        document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°F";
-        document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
-        document.querySelector(".wind").innerHTML = data.wind.speed + " mph";
+            document.querySelector(".city").innerHTML = data.name;
+            document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°F";
+            document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+            document.querySelector(".wind").innerHTML = data.wind.speed + " mph";
 
-        if(data.weather[0].main == "Clouds") {
-            currWeatherIcon.src = "images/clouds.png";
-        } else if (data.weather[0].main == "Clear") {
-            currWeatherIcon.src = "images/clear.png";
-        } else if (data.weather[0].main == "Drizzle") {
-            currWeatherIcon.src = "images/drizzle.png";
-        } else if (data.weather[0].main == "Mist") {
-            currWeatherIcon.src = "images/mist.png";
-        } else if (data.weather[0].main == "Rain") {
-            currWeatherIcon.src = "images/rain.png";
-        } else if (data.weather[0].main == "Snow") {
-            currWeatherIcon.src = "images/snow.png";
+            if(data.weather[0].main == "Clouds") {
+                currWeatherIcon.src = "images/clouds.png";
+            } else if (data.weather[0].main == "Clear") {
+                currWeatherIcon.src = "images/clear.png";
+            } else if (data.weather[0].main == "Drizzle") {
+                currWeatherIcon.src = "images/drizzle.png";
+            } else if (data.weather[0].main == "Mist") {
+                currWeatherIcon.src = "images/mist.png";
+            } else if (data.weather[0].main == "Rain") {
+                currWeatherIcon.src = "images/rain.png";
+            } else if (data.weather[0].main == "Snow") {
+                currWeatherIcon.src = "images/snow.png";
+            }
+
+            document.querySelector(".weather").style.display = "block";
+            document.querySelector(".error").style.display = "none";
         }
-
-        document.querySelector(".weather").style.display = "block";
+    
     }
+
+    inputBox.addEventListener("keypress", 
+        function(event) {
+            if (event.keyCode == 13) {
+                checkWeather(inputBox.value);
+            }
+        } )
 
     searchButton.addEventListener("click", ()=>{
         checkWeather(inputBox.value);
     })
 
 </script>
-
     
 </body>
 </html>
