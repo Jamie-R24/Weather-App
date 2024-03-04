@@ -34,6 +34,18 @@
     </div>
 </div>
 
+<script>
+    const apiKey = "a299a166f3c8fc853a216d20b99eabc0";
+    const apiURL= "https://api.openweathermap.org/data/2.5/weather?&q=Los&Gatos";
+
+    async function checkWeather() {
+        const response = await fetch(apiURL + `&appid=&{apiKey}`);
+        var data = await response.json();
+
+        console.log(data);
+    }
+
+</script>
 
     
 </body>
